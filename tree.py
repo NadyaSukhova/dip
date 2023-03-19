@@ -46,8 +46,6 @@ def tree(texts):
     raw_train = raw_train[len(raw_train)//3 + 1 :]
     """
 
-
-
     test_links = texts
 
     def ru_token(string):
@@ -215,6 +213,6 @@ def tree(texts):
     sub_df = pd.DataFrame()
     sub_df['sentiment'] = sub_pred
     sub_df['text'] = [i for i in test_links]
-
+    sub_df.to_csv('softmax_tree.csv', index=False, encoding="utf-8-sig")
     return sub_df, classification_report(c_true, c_pred, target_names=lab.classes_, digits=5, output_dict=True)
 # sub_df.to_csv('softmax_reg.csv', index=False)

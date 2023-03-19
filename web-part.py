@@ -16,15 +16,15 @@ from SGD import SGD
 #streamlit run web-part.py
 
 st.write("""
-# Семантический анализ новостей
+# Анализ тональности новостей
 """)
 
 def user_input_features():
     st.sidebar.info('Формирование выборки')
-    date1 = st.sidebar.date_input('Введите начало периода')
-    date2 = st.sidebar.date_input('Введите конец периода')
-    loc = st.sidebar.text_input('Введите название региона')
-    st.sidebar.info('Выберите модели')
+    date1 = st.sidebar.date_input('Начало периода')
+    date2 = st.sidebar.date_input('Конец периода')
+    loc = st.sidebar.text_input('Регион')
+    st.sidebar.info('Выбор метода')
     log = st.sidebar.checkbox('Логистическая регресия')
     tree = st.sidebar.checkbox('Дерево решений')
     forest = st.sidebar.checkbox('Случайный лес')
@@ -100,7 +100,7 @@ if res_SGD != 0:
 if accur != {}:
     st.subheader('Таблица точности методов')
     st.dataframe(pd.DataFrame(accur))
-    st.subheader('Вывод')
+    st.subheader('Оценка моделей')
     best_accur = max(accur.values())[0]
     best_accur_name = max(accur, key=lambda x: accur[x])
     if best_accur_name == 'Логистическая регресия':
@@ -112,11 +112,12 @@ if accur != {}:
     if best_accur_name == 'Стохастический градиентный спуск':
         df_res = df_SGD
 
+    #округлить точность
     st.write("Максимальная точность " + str(best_accur) + " была получена методом \"" + best_accur_name + "\"")
     sent_count = Counter(df_res.to_dict('dict')['sentiment'].values())
-    st.subheader('Гистограмма')
+    st.subheader('Анализ тональности')
     chart_data = pd.DataFrame(
         [[sent_count['positive'],0,0], [0,sent_count['neutral'],0], [0,0,sent_count['negative']]],
-        columns=["positive", "neutral", "negative"])
+        columns=["позитивные", "нейтральные", "негативные"])
 
     st.bar_chart(chart_data)

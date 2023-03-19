@@ -18,13 +18,8 @@ def log_regres(texts):
     # read date
     with io.open('input/train.json', encoding='utf-8') as f:
         raw_train = json.load(f)
-    """
-    with io.open('input/test.json', encoding='utf-8') as f:
-        raw_test = json.load(f)
-    """
-    """test_links = raw_train[0:len(raw_train)//3]
-    raw_train = raw_train[len(raw_train)//3 + 1 :]
-    """
+
+
     test_links = texts
 
     def ru_token(string):
@@ -98,11 +93,10 @@ def log_regres(texts):
     print(classification_report(c_true, c_pred, target_names=lab.classes_, digits=5))
 
     sub_pred = softmax.predict(tfidf.transform([i for i in test_links]))
-    sub_df = pd.DataFrame()
-    sub_df['sentiment'] = sub_pred
-    sub_df['text'] = [i for i in test_links]
+    sub_df = pd.DataFrame({"sentiment": sub_pred, 'text': [i for i in test_links]})
 
     sub_df.head()
+    sub_df.to_csv('softmax_log.csv', index=False, encoding="utf-8-sig", columns=["sentiment", 'text'])
     return sub_df, classification_report(c_true, c_pred, target_names=lab.classes_, digits=5, output_dict=True)
 
 #sub_df.to_csv('softmax_reg.csv', index=False)

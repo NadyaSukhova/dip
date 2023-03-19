@@ -31,8 +31,9 @@ def get_links(date1, date2, loc):
         source = requests.get(link)
         soup = BeautifulSoup(source.text, 'lxml')
         text = ''
-        for i in soup.find("div", {"class": 'article__body js-mediator-article mia-analytics'}):
-            text += i.get_text() + ' '
-        texts.append(text)
+        if soup.find("div", {"class": 'article__body js-mediator-article mia-analytics'}):
+            for i in soup.find("div", {"class": 'article__body js-mediator-article mia-analytics'}):
+                text += i.get_text() + ' '
+            texts.append(text)
 
     return texts

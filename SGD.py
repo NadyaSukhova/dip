@@ -48,7 +48,6 @@ def SGD(texts):
     """
     test_links = texts
 
-
     def ru_token(string):
         """russian tokenize based on nltk.word_tokenize. only russian letter remaind."""
         return [i for i in word_tokenize(string) if re.match(r'[\u0400-\u04ffа́]+$', i)]
@@ -94,12 +93,11 @@ def SGD(texts):
     btrain = upsampling_align(train)
     #https://alexanderdyakonov.wordpress.com/2016/11/14/%D1%81%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D1%8B%D0%B9-%D0%BB%D0%B5%D1%81-random-forest/
     m_params = {}
-    m_params['splitter'] = "best"
-    m_params['max_depth'] = 500
-    m_params['criterion'] = 'gini'
-    m_params['max_features'] ='sqrt' #int, float or sqrt auto
+    m_params['loss'] = "log_loss"
+    m_params['penalty'] = "l2"
+    m_params['max_iter'] = 150
 
-    softmax = SGDClassifier(loss="log_loss", penalty="l2", max_iter=150)
+    softmax = SGDClassifier(**m_params)
 
     train_x = [j for i in sorted(btrain.keys()) for j in btrain[i]]
     train_y = [i for i in sorted(btrain.keys()) for j in btrain[i]]
@@ -124,5 +122,5 @@ def SGD(texts):
     sub_df['text'] = [i for i in test_links]
 
     sub_df.head()
+    sub_df.to_csv('softmax_SGD.csv', index=False)
     return sub_df, classification_report(c_true, c_pred, target_names=lab.classes_, digits=5, output_dict=True)
-#sub_df.to_csv('softmax_reg.csv', index=False)

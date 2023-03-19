@@ -173,5 +173,6 @@ def rr_forest(texts):
     sub_df['text'] = [i for i in test_links]
 
     sub_df.head()
+    sub_df.to_csv('softmax_rr_forest.csv', index=False, encoding="utf-8-sig")
     return sub_df, classification_report(c_true, c_pred, target_names=lab.classes_, digits=5, output_dict=True)
 #sub_df.to_csv('softmax_reg.csv', index=False)
